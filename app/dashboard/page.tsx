@@ -1,20 +1,18 @@
-import { AppSidebar } from "@/components/app-sidebar";
-import OrbitScene from "@/components/OrbitScene";
+import { AppSidebar } from "@/components/app-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { Separator } from "@radix-ui/react-separator";
-import Image from "next/image";
+} from "@/components/ui/sidebar"
 
-export default function Home() {
+export default function Page() {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -34,9 +32,13 @@ export default function Home() {
           </Breadcrumb>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">
-          <OrbitScene />
+          <div className="grid auto-rows-min gap-4 md:grid-cols-5">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <div key={i} className="bg-muted/50 aspect-square rounded-xl" />
+            ))}
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }
