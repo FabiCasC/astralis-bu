@@ -1,6 +1,140 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
+// Componente de Intro Cinematográfica
+function CinematicIntro({ onComplete }) {
+  const [stage, setStage] = useState(0); // 0: stars, 1: logo, 2: subtitle, 3: prompt
+  const canvasRef = useRef(null);
+  
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
+    
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      2000
+    );
+    camera.position.z = 1;
+    
+    const renderer = new THREE.WebGLRenderer({ 
+      canvas: canvasRef.current,
+      antialias: true 
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    // Crear estrellas
+    const starGeometry = new THREE.BufferGeometry();
+    const starVertices = [];
+    const starSizes = [];
+    
+    for (let i = 0; i < 3000; i++) {
+      const x = (Math.random() - 0.5) * 2000;
+      const y = (Math.random() - 0.5) * 2000;
+      const z = (Math.random() - 0.5) * 2000;
+      starVertices.push(x, y, z);
+      starSizes.push(Math.random() * 2);
+    }
+    
+    starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+    starGeometry.setAttribute('size', new THREE.Float32BufferAttribute(starSizes, 1));
+    
+    const starMaterial = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 2,
+      sizeAttenuation: true,
+      transparent: true,
+      opacity: 0
+    });
+    const stars = new THREE.Points(starGeometry, starMaterial);
+    scene.add(stars);
+    
+    // Animación
+    let opacity = 0;
+    let rotation = 0;
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Fade in de estrellas
+      if (opacity < 1) {
+        opacity += 0.01;
+        starMaterial.opacity = opacity;
+      }
+      
+      rotation += 0.0002;
+      stars.rotation.y = rotation;
+      stars.rotation.x = rotation * 0.5;
+      
+      camera.position.z = 1 + Math.sin(rotation * 2) * 0.1;
+      
+      renderer.render(scene, camera);
+    }
+    animate();
+    
+    // Stages de la intro
+    const timers = [
+      setTimeout(() => setStage(1), 1000),   // Logo aparece
+      setTimeout(() => setStage(2), 2500),   // Subtítulo
+      setTimeout(() => setStage(3), 4000),   // Prompt
+    ];
+    
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      timers.forEach(t => clearTimeout(t));
+      window.removeEventListener('resize', handleResize);
+      renderer.dispose();
+    };
+  }, []);
+  
+  return (
+    <div style={introStyles.container} onClick={onComplete}>
+      <canvas ref={canvasRef} style={introStyles.canvas} />
+      
+      <div style={introStyles.content}>
+        <div style={{
+          ...introStyles.logo,
+          opacity: stage >= 1 ? 1 : 0,
+          transform: stage >= 1 ? 'translateY(0)' : 'translateY(30px)'
+        }}>
+          ASTRALIS
+        </div>
+        
+        <div style={{
+          ...introStyles.subtitle,
+          opacity: stage >= 2 ? 1 : 0,
+          transform: stage >= 2 ? 'translateY(0)' : 'translateY(20px)'
+        }}>
+          BEYOND UNIVERSE
+        </div>
+        
+        <div style={{
+          ...introStyles.description,
+          opacity: stage >= 2 ? 1 : 0,
+        }}>
+          ASTEROID IMPACT SIMULATOR
+        </div>
+        
+        {stage >= 3 && (
+          <div style={introStyles.prompt}>
+            <div style={introStyles.promptText}>CLICK TO ENTER</div>
+            <div style={introStyles.promptArrow}>▼</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Componente de Slider personalizado con botón de info
 function ParameterSlider({ label, value, onChange, min, max, step, unit, info }) {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -44,6 +178,8 @@ function ParameterSlider({ label, value, onChange, min, max, step, unit, info })
 
 // Componente principal
 export default function AsteroidSimulator() {
+  const [showIntro, setShowIntro] = useState(true);
+  const [transitioning, setTransitioning] = useState(false);
   const canvasRef = useRef(null);
   
   // Estados para parámetros físicos
@@ -61,8 +197,16 @@ export default function AsteroidSimulator() {
   
   const [isMinimized, setIsMinimized] = useState(false);
   
+  const handleIntroComplete = () => {
+    setTransitioning(true);
+    setTimeout(() => {
+      setShowIntro(false);
+      setTransitioning(false);
+    }, 1500);
+  };
+  
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (showIntro || !canvasRef.current) return;
     
     // Configuración de la escena
     const scene = new THREE.Scene();
@@ -134,7 +278,7 @@ export default function AsteroidSimulator() {
       starGeometry.dispose();
       starMaterial.dispose();
     };
-  }, []);
+  }, [showIntro]);
   
   const handleSimulate = () => {
     console.log('Simulando con parámetros:', {
@@ -143,6 +287,17 @@ export default function AsteroidSimulator() {
     });
     alert('¡Simulación iniciada! (Aquí irá la lógica de simulación)');
   };
+  
+  if (showIntro) {
+    return (
+      <div style={{
+        ...introStyles.transition,
+        opacity: transitioning ? 0 : 1
+      }}>
+        <CinematicIntro onComplete={handleIntroComplete} />
+      </div>
+    );
+  }
   
   return (
     <div style={styles.container}>
@@ -299,7 +454,87 @@ export default function AsteroidSimulator() {
   );
 }
 
-// Estilos
+// Estilos de la intro
+const introStyles = {
+  container: {
+    width: '100vw',
+    height: '100vh',
+    position: 'relative',
+    overflow: 'hidden',
+    cursor: 'pointer',
+    background: '#000',
+  },
+  canvas: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  content: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    textAlign: 'center',
+    zIndex: 10,
+  },
+  logo: {
+    fontSize: '120px',
+    fontWeight: '900',
+    color: '#ffffff',
+    letterSpacing: '20px',
+    fontFamily: '"Orbitron", "Rajdhani", "Exo 2", monospace',
+    textShadow: `
+      0 0 20px rgba(100, 150, 255, 0.8),
+      0 0 40px rgba(100, 150, 255, 0.6),
+      0 0 60px rgba(100, 150, 255, 0.4),
+      0 0 80px rgba(100, 150, 255, 0.2)
+    `,
+    transition: 'all 1.5s cubic-bezier(0.16, 1, 0.3, 1)',
+    marginBottom: '20px',
+  },
+  subtitle: {
+    fontSize: '24px',
+    fontWeight: '600',
+    color: '#6b9fff',
+    letterSpacing: '8px',
+    fontFamily: '"Orbitron", "Rajdhani", monospace',
+    transition: 'all 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+    marginBottom: '10px',
+  },
+  description: {
+    fontSize: '14px',
+    fontWeight: '400',
+    color: '#8899bb',
+    letterSpacing: '4px',
+    fontFamily: '"Orbitron", monospace',
+    textTransform: 'uppercase',
+    transition: 'all 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+    marginTop: '20px',
+  },
+  prompt: {
+    marginTop: '80px',
+    animation: 'pulse 2s infinite',
+  },
+  promptText: {
+    fontSize: '16px',
+    color: '#ffffff',
+    letterSpacing: '4px',
+    fontFamily: '"Orbitron", monospace',
+    marginBottom: '10px',
+  },
+  promptArrow: {
+    fontSize: '24px',
+    color: '#6b9fff',
+    animation: 'bounce 1.5s infinite',
+  },
+  transition: {
+    transition: 'opacity 1.5s ease-out',
+  },
+};
+
+// Estilos principales
 const styles = {
   container: {
     width: '100vw',
@@ -346,6 +581,7 @@ const styles = {
     fontWeight: '700',
     color: '#ffffff',
     textShadow: '0 0 10px rgba(100, 150, 255, 0.5)',
+    fontFamily: '"Orbitron", sans-serif',
   },
   minimizeButton: {
     background: 'rgba(100, 150, 255, 0.2)',
@@ -367,6 +603,7 @@ const styles = {
     marginBottom: '15px',
     textTransform: 'uppercase',
     letterSpacing: '1px',
+    fontFamily: '"Orbitron", sans-serif',
   },
   sliderContainer: {
     marginBottom: '20px',
@@ -421,6 +658,7 @@ const styles = {
     boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
     textTransform: 'uppercase',
     letterSpacing: '1px',
+    fontFamily: '"Orbitron", sans-serif',
   },
   titleContainer: {
     position: 'absolute',
@@ -439,6 +677,7 @@ const styles = {
     textShadow: '0 0 20px rgba(100, 150, 255, 0.8), 0 0 40px rgba(100, 150, 255, 0.4)',
     letterSpacing: '4px',
     opacity: 0.15,
+    fontFamily: '"Orbitron", sans-serif',
   },
   subtitle: {
     fontSize: '18px',
@@ -469,6 +708,7 @@ const styles = {
     color: '#ffffff',
     letterSpacing: '3px',
     textShadow: '0 0 15px rgba(100, 150, 255, 0.8)',
+    fontFamily: '"Orbitron", sans-serif',
   },
   logoSubtext: {
     fontSize: '14px',
@@ -504,8 +744,17 @@ const styles = {
   },
 };
 
-// CSS para el slider (inyectado dinámicamente)
+// CSS y fuentes
 if (typeof document !== 'undefined') {
+  // Importar fuentes espaciales
+  const fontLink = document.createElement('link');
+  fontLink.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;600;700&display=swap';
+  fontLink.rel = 'stylesheet';
+  if (!document.querySelector('link[href*="Orbitron"]')) {
+    document.head.appendChild(fontLink);
+  }
+  
+  // Estilos para sliders y animaciones
   const styleSheet = document.createElement("style");
   styleSheet.textContent = `
     input[type="range"]::-webkit-slider-thumb {
@@ -538,6 +787,16 @@ if (typeof document !== 'undefined') {
     input[type="range"]::-moz-range-thumb:hover {
       transform: scale(1.2);
       box-shadow: 0 0 15px rgba(102, 126, 234, 0.8);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
     }
   `;
   if (!document.querySelector('style[data-slider-styles]')) {
