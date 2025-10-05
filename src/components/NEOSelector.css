@@ -1,0 +1,174 @@
+.neo-selector {
+  background: rgba(15, 15, 35, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(100, 150, 255, 0.3);
+  padding: 20px;
+  margin: 20px;
+  max-width: 500px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.neo-selector-title {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 10px rgba(100, 150, 255, 0.5);
+}
+
+.neo-selector-section {
+  margin-bottom: 25px;
+}
+
+.neo-selector-label {
+  display: block;
+  color: #a0b0d0;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.neo-selector-select {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(20, 20, 40, 0.8);
+  border: 1px solid rgba(100, 150, 255, 0.3);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.neo-selector-select:focus {
+  outline: none;
+  border-color: #6b9fff;
+  box-shadow: 0 0 10px rgba(107, 159, 255, 0.3);
+}
+
+.neo-selector-select option {
+  background: #1a1a2e;
+  color: #ffffff;
+}
+
+.neo-details-title,
+.trajectory-title,
+.trajectory-results-title {
+  color: #6b9fff;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.neo-details {
+  background: rgba(10, 10, 25, 0.6);
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid rgba(100, 150, 255, 0.2);
+}
+
+.neo-detail-item {
+  color: #e0e8ff;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.neo-detail-item strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Estilos para el componente de parámetros de trayectoria */
+.neo-selector-section .trajectory-parameters {
+  margin: 0;
+  padding: 15px;
+  max-width: none;
+  width: 100%;
+}
+
+.trajectory-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.trajectory-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.trajectory-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.trajectory-results {
+  background: rgba(10, 10, 25, 0.6);
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid rgba(100, 150, 255, 0.2);
+}
+
+.trajectory-result-item {
+  color: #e0e8ff;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.trajectory-result-item strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.loading-spinner {
+  color: #6b9fff;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+  font-family: 'Orbitron', sans-serif;
+  animation: pulse 2s infinite;
+}
+
+.error-message {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .neo-selector {
+    margin: 10px;
+    padding: 15px;
+  }
+  
+  .trajectory-options {
+    gap: 12px;
+  }
+}

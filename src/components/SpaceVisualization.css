@@ -1,0 +1,128 @@
+.space-visualization {
+  background: rgba(15, 15, 35, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(100, 150, 255, 0.3);
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.visualization-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(100, 150, 255, 0.2);
+}
+
+.visualization-header h3 {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 10px rgba(100, 150, 255, 0.5);
+}
+
+.visualization-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-end;
+}
+
+.visualization-info span {
+  color: #a0b0d0;
+  font-size: 12px;
+  font-family: 'Orbitron', monospace;
+  background: rgba(100, 150, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(100, 150, 255, 0.2);
+}
+
+.space-canvas {
+  border-radius: 12px;
+  border: 1px solid rgba(100, 150, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.visualization-controls {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(100, 150, 255, 0.2);
+}
+
+.control-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.control-info p {
+  color: #e0e8ff;
+  font-size: 14px;
+  margin: 0;
+  padding: 8px 12px;
+  background: rgba(10, 10, 25, 0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(100, 150, 255, 0.1);
+  font-family: 'Orbitron', monospace;
+}
+
+.control-info p:first-child {
+  color: #4a90e2; /* Azul para la Tierra */
+}
+
+.control-info p:nth-child(2) {
+  color: #6b9fff; /* Azul claro para la órbita */
+}
+
+.control-info p:nth-child(3) {
+  color: #ff6b47; /* Naranja para el meteorito */
+}
+
+.control-info p:last-child {
+  color: #ff4444; /* Rojo para la trayectoria */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .space-visualization {
+    margin: 10px;
+    padding: 15px;
+  }
+  
+  .visualization-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .visualization-info {
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .control-info {
+    grid-template-columns: 1fr;
+  }
+  
+  .space-canvas {
+    height: 400px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .space-canvas {
+    height: 300px !important;
+  }
+  
+  .visualization-header h3 {
+    font-size: 18px;
+  }
+}

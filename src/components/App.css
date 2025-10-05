@@ -1,0 +1,10 @@
+.intro-transition {
+  transition: opacity 1.5s ease-out;
+}
+
+.intro-transition.fade-out {
+  opacity: 0;
+}
+
+/* Importar fuentes espaciales */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;600;700&display=swap');
