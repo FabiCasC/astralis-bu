@@ -2,46 +2,46 @@ import React, { useState } from 'react';
 import ParameterSlider from './ParameterSlider';
 import './TrajectoryParameters.css';
 
-function TrajectoryParameters({ onParametersChange, initialParameters = {} }) {
+function TrajectoryParameters({ onParametersChange, parameters = {} }) {
   // Estados para parámetros de trayectoria
   const [position, setPosition] = useState({
-    x: initialParameters.position_km?.[0] || initialParameters.position?.x || 1000,
-    y: initialParameters.position_km?.[1] || initialParameters.position?.y || 2000,
-    z: initialParameters.position_km?.[2] || initialParameters.position?.z || 3000
+    x: parameters.position_km?.[0] || parameters.position?.x || 1000,
+    y: parameters.position_km?.[1] || parameters.position?.y || 2000,
+    z: parameters.position_km?.[2] || parameters.position?.z || 3000
   });
 
   const [velocity, setVelocity] = useState({
-    vx: initialParameters.velocity_kms?.[0] || initialParameters.velocity?.vx || 10,
-    vy: initialParameters.velocity_kms?.[1] || initialParameters.velocity?.vy || 20,
-    vz: initialParameters.velocity_kms?.[2] || initialParameters.velocity?.vz || 30
+    vx: parameters.velocity_kms?.[0] || parameters.velocity?.vx || 10,
+    vy: parameters.velocity_kms?.[1] || parameters.velocity?.vy || 20,
+    vz: parameters.velocity_kms?.[2] || parameters.velocity?.vz || 30
   });
 
-  const [density, setDensity] = useState(initialParameters.density_kg_m3 || initialParameters.density || 2500);
-  const [dt, setDt] = useState(initialParameters.dt || 0.5);
+  const [density, setDensity] = useState(parameters.density_kg_m3 || parameters.density || 2500);
+  const [dt, setDt] = useState(parameters.dt || 0.5);
 
-  // Actualizar estados cuando cambien los parámetros iniciales
+  // Actualizar estados cuando cambien los parámetros
   React.useEffect(() => {
-    if (initialParameters.position_km) {
+    if (parameters.position_km) {
       setPosition({
-        x: initialParameters.position_km[0] || 1000,
-        y: initialParameters.position_km[1] || 2000,
-        z: initialParameters.position_km[2] || 3000
+        x: parameters.position_km[0] || 1000,
+        y: parameters.position_km[1] || 2000,
+        z: parameters.position_km[2] || 3000
       });
     }
-    if (initialParameters.velocity_kms) {
+    if (parameters.velocity_kms) {
       setVelocity({
-        vx: initialParameters.velocity_kms[0] || 10,
-        vy: initialParameters.velocity_kms[1] || 20,
-        vz: initialParameters.velocity_kms[2] || 30
+        vx: parameters.velocity_kms[0] || 10,
+        vy: parameters.velocity_kms[1] || 20,
+        vz: parameters.velocity_kms[2] || 30
       });
     }
-    if (initialParameters.density_kg_m3 !== undefined) {
-      setDensity(initialParameters.density_kg_m3);
+    if (parameters.density_kg_m3 !== undefined) {
+      setDensity(parameters.density_kg_m3);
     }
-    if (initialParameters.dt !== undefined) {
-      setDt(initialParameters.dt);
+    if (parameters.dt !== undefined) {
+      setDt(parameters.dt);
     }
-  }, [initialParameters]);
+  }, [parameters]);
 
   // Función para actualizar parámetros y notificar al componente padre
   const updateParameters = React.useCallback((newParams = {}) => {
@@ -58,24 +58,58 @@ function TrajectoryParameters({ onParametersChange, initialParameters = {} }) {
     }
   }, [position, velocity, density, dt, onParametersChange]);
 
-  // Actualizar parámetros cuando cambien los valores
+  // Actualizar parámetros cuando cambien los valores (con debounce)
   React.useEffect(() => {
-    updateParameters();
-  }, [updateParameters]);
+    const timeoutId = setTimeout(() => {
+      updateParameters();
+    }, 100); // Debounce de 100ms
 
-  const handlePositionChange = (axis, value) => {
-    setPosition(prev => ({
-      ...prev,
-      [axis]: value
-    }));
-  };
+    return () => clearTimeout(timeoutId);
+  }, [position.x, position.y, position.z, velocity.vx, velocity.vy, velocity.vz, density, dt]);
 
-  const handleVelocityChange = (axis, value) => {
-    setVelocity(prev => ({
-      ...prev,
-      [axis]: value
-    }));
-  };
+  const handlePositionChange = React.useCallback((axis, value) => {
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue)) {
+      setPosition(prev => {
+        if (prev[axis] !== numValue) {
+          return {
+            ...prev,
+            [axis]: numValue
+          };
+        }
+        return prev;
+      });
+    }
+  }, []);
+
+  const handleVelocityChange = React.useCallback((axis, value) => {
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue)) {
+      setVelocity(prev => {
+        if (prev[axis] !== numValue) {
+          return {
+            ...prev,
+            [axis]: numValue
+          };
+        }
+        return prev;
+      });
+    }
+  }, []);
+
+  const handleDensityChange = React.useCallback((value) => {
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue) && numValue !== density) {
+      setDensity(numValue);
+    }
+  }, [density]);
+
+  const handleDtChange = React.useCallback((value) => {
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue) && numValue !== dt) {
+      setDt(numValue);
+    }
+  }, [dt]);
 
   return (
     <div className="trajectory-parameters">
@@ -166,7 +200,7 @@ function TrajectoryParameters({ onParametersChange, initialParameters = {} }) {
         <ParameterSlider
           label="Densidad"
           value={density}
-          onChange={setDensity}
+          onChange={handleDensityChange}
           min={100}
           max={8000}
           step={100}
@@ -177,7 +211,7 @@ function TrajectoryParameters({ onParametersChange, initialParameters = {} }) {
         <ParameterSlider
           label="Paso de Tiempo"
           value={dt}
-          onChange={setDt}
+          onChange={handleDtChange}
           min={0.1}
           max={2.0}
           step={0.1}

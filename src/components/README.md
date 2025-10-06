@@ -1,6 +1,6 @@
 # Componentes del Simulador de Asteroides
 
-Esta carpeta contiene todos los componentes React organizados de manera modular para el proyecto ASTRALIS - Beyond Universe.
+Esta carpeta contiene todos los componentes React organizados de manera modular para el proyecto ASTRALIS - The Universe of What If.
 
 ## Estructura de Componentes
 

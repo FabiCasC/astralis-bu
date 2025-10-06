@@ -1,19 +1,19 @@
 .trajectory-parameters {
-  background: rgba(15, 15, 35, 0.9);
+  background: rgba(15, 15, 35, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 16px;
   border: 1px solid rgba(100, 150, 255, 0.3);
-  padding: 20px;
-  margin: 20px;
-  max-width: 600px;
+  padding: 25px;
+  margin: 0 auto;
+  max-width: 100%;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .trajectory-parameters-title {
   color: #ffffff;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   text-align: center;
   font-family: 'Orbitron', sans-serif;
   text-shadow: 0 0 10px rgba(100, 150, 255, 0.5);
@@ -21,10 +21,10 @@
 
 .parameter-section {
   margin-bottom: 25px;
-  padding: 15px;
-  background: rgba(10, 10, 25, 0.6);
+  padding: 20px;
+  background: rgba(10, 10, 25, 0.7);
   border-radius: 12px;
-  border: 1px solid rgba(100, 150, 255, 0.2);
+  border: 1px solid rgba(100, 150, 255, 0.3);
 }
 
 .section-title {

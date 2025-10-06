@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
 import { useNEOs, useNEODetails, useTrajectoryCalculation } from '../hooks/useNEOs.js';
 import TrajectoryParameters from './TrajectoryParameters.jsx';
-import ImpactScenarios from './ImpactScenarios.jsx';
 import './NEOSelector.css';
 
 function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange }) {
   const [selectedNEOId, setSelectedNEOId] = useState('');
-  const [showImpactScenarios, setShowImpactScenarios] = useState(false);
   const [trajectoryParams, setTrajectoryParams] = useState({
     position_km: [1000, 2000, 3000],
     velocity_kms: [10, 20, 30],
     density_kg_m3: 2500,
     dt: 0.5
   });
+
+  // Datos de ejemplo para NEOs si no hay datos reales
+  const exampleNEOs = [
+    { id: '2000433', name: '433 Eros' },
+    { id: '2001862', name: '1862 Apollo' },
+    { id: '2001221', name: '1221 Amor' },
+    { id: '2004179', name: '4179 Toutatis' },
+    { id: '20025143', name: '25143 Itokawa' },
+    { id: '20065803', name: '65803 Didymos' },
+    { id: '200101955', name: '101955 Bennu' },
+    { id: '200162173', name: '162173 Ryugu' }
+  ];
 
   // Hooks para obtener datos
   const { neos, loading: neosLoading, error: neosError } = useNEOs();
@@ -22,9 +32,43 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
   const handleNEOChange = (event) => {
     const neoId = event.target.value;
     setSelectedNEOId(neoId);
+    
+    // Cargar parámetros por defecto basados en el NEO seleccionado
+    if (neoId) {
+      const defaultParams = generateDefaultParams(neoId);
+      setTrajectoryParams(defaultParams);
+      if (onParametersChange) {
+        onParametersChange(defaultParams);
+      }
+    }
+    
     if (onNEOSelected) {
       onNEOSelected(neoId);
     }
+  };
+
+  // Generar parámetros por defecto basados en el NEO
+  const generateDefaultParams = (neoId) => {
+    const baseParams = {
+      position_km: [1000, 2000, 3000],
+      velocity_kms: [10, 20, 30],
+      density_kg_m3: 2500,
+      dt: 0.5
+    };
+
+    // Variar parámetros según el NEO para simular diferentes tipos
+    const variations = {
+      '2000433': { position_km: [800, 1500, 2200], velocity_kms: [12, 18, 25], density_kg_m3: 2700 },
+      '2001862': { position_km: [1200, 2500, 3800], velocity_kms: [8, 15, 22], density_kg_m3: 2300 },
+      '2001221': { position_km: [900, 1800, 2700], velocity_kms: [11, 19, 28], density_kg_m3: 2600 },
+      '2004179': { position_km: [1500, 3000, 4500], velocity_kms: [7, 14, 21], density_kg_m3: 2100 },
+      '20025143': { position_km: [600, 1200, 1800], velocity_kms: [15, 25, 35], density_kg_m3: 2900 },
+      '20065803': { position_km: [1100, 2200, 3300], velocity_kms: [9, 17, 24], density_kg_m3: 2400 },
+      '200101955': { position_km: [700, 1400, 2100], velocity_kms: [13, 21, 29], density_kg_m3: 2800 },
+      '200162173': { position_km: [1000, 2000, 3000], velocity_kms: [10, 20, 30], density_kg_m3: 2500 }
+    };
+
+    return { ...baseParams, ...(variations[neoId] || {}) };
   };
 
   const handleCalculateTrajectory = async () => {
@@ -38,10 +82,14 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
       if (onTrajectoryCalculated) {
         onTrajectoryCalculated(trajectory);
       }
+      // Las tarjetas de impacto se mostrarán automáticamente en el componente principal
     } catch (error) {
       console.error('Error calculando trayectoria:', error);
+      alert('Error calculando la trayectoria. Inténtalo de nuevo.');
     }
   };
+
+
 
   const handleParametersChange = (newParams) => {
     setTrajectoryParams(newParams);
@@ -51,15 +99,6 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
     }
   };
 
-  const handleApplyImpactScenario = (scenarioParams) => {
-    console.log('🎯 Aplicando escenario de impacto:', scenarioParams);
-    setTrajectoryParams(scenarioParams);
-    // También notificar al componente padre
-    if (onParametersChange) {
-      onParametersChange(scenarioParams);
-    }
-    setShowImpactScenarios(false);
-  };
 
   return (
     <div className="neo-selector">
@@ -72,9 +111,22 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
         </label>
         {neosLoading ? (
           <div className="loading-spinner">Cargando NEOs...</div>
-        ) : neosError ? (
-          <div className="error-message">
-            Error: {neosError.message}
+        ) : neosError || !neos || neos.length === 0 ? (
+          <div className="neo-examples">
+            <p className="examples-info">📡 Usando datos de ejemplo mientras se conecta al servidor...</p>
+            <select
+              id="neo-select"
+              value={selectedNEOId}
+              onChange={handleNEOChange}
+              className="neo-selector-select"
+            >
+              <option value="">Selecciona un NEO</option>
+              {exampleNEOs.map(neo => (
+                <option key={neo.id} value={neo.id}>
+                  {neo.name} (ID: {neo.id})
+                </option>
+              ))}
+            </select>
           </div>
         ) : (
           <select
@@ -132,44 +184,23 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
       {/* Parámetros de trayectoria */}
       {selectedNEOId && (
         <div className="neo-selector-section">
-          <div className="trajectory-controls">
-            <button
-              onClick={() => setShowImpactScenarios(!showImpactScenarios)}
-              className="impact-scenarios-toggle"
-              style={{
-                marginBottom: '16px',
-                padding: '10px 16px',
-                backgroundColor: showImpactScenarios ? '#ff6b47' : '#6b9fff',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: '600',
-                transition: 'all 0.3s'
-              }}
-            >
-              {showImpactScenarios ? '📊 Ocultar Escenarios de Impacto' : '🎯 Ver Escenarios de Impacto'}
-            </button>
-          </div>
-
-          {showImpactScenarios && (
-            <ImpactScenarios onApplyScenario={handleApplyImpactScenario} />
-          )}
-          
           <TrajectoryParameters 
+            parameters={trajectoryParams}
             onParametersChange={handleParametersChange}
-            initialParameters={trajectoryParams}
-            key={JSON.stringify(trajectoryParams)} // Force re-render when params change
           />
           
-          <button
-            onClick={handleCalculateTrajectory}
-            disabled={trajectoryLoading}
-            className="trajectory-button"
-          >
-            {trajectoryLoading ? 'Calculando...' : 'Calcular Trayectoria'}
-          </button>
+          {/* Botón para calcular trayectoria */}
+          <div className="trajectory-controls">
+            <button
+              onClick={handleCalculateTrajectory}
+              disabled={trajectoryLoading}
+              className="calculate-trajectory-btn"
+            >
+              {trajectoryLoading ? '🔄 Calculando...' : '🚀 Calcular Trayectoria'}
+            </button>
+            
+          </div>
+
         </div>
       )}
 
@@ -200,6 +231,7 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
           </div>
         </div>
       )}
+
     </div>
   );
 }

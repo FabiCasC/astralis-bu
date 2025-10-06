@@ -1,0 +1,303 @@
+.trajectory-visualization {
+  position: absolute;
+  top: 200px;
+  right: 20px;
+  z-index: 10;
+  max-width: 400px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.visualization-panel {
+  background: rgba(15, 15, 35, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  border: 1px solid rgba(100, 150, 255, 0.3);
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.visualization-panel h4 {
+  color: #6b9fff;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  text-align: center;
+  font-family: "Orbitron", sans-serif;
+  text-shadow: 0 0 10px rgba(107, 159, 255, 0.5);
+}
+
+.visualization-panel h5 {
+  color: #4a7cff;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+  font-family: "Orbitron", sans-serif;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.metric-card {
+  background: rgba(10, 10, 25, 0.6);
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid rgba(100, 150, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(100, 150, 255, 0.3);
+  border-color: rgba(100, 150, 255, 0.5);
+}
+
+.metric-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(100, 150, 255, 0.1);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.metric-content {
+  flex: 1;
+}
+
+.metric-label {
+  color: #a0b0d0;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: "Orbitron", monospace;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Orbitron", monospace;
+  margin-bottom: 2px;
+}
+
+.metric-description {
+  color: #8080a0;
+  font-size: 10px;
+  font-family: "Orbitron", monospace;
+  line-height: 1.3;
+}
+
+/* Colores específicos para diferentes tipos de métricas */
+.metric-card.distance .metric-icon {
+  background: rgba(74, 144, 226, 0.2);
+  border: 1px solid rgba(74, 144, 226, 0.3);
+}
+
+.metric-card.speed .metric-icon {
+  background: rgba(255, 107, 71, 0.2);
+  border: 1px solid rgba(255, 107, 71, 0.3);
+}
+
+.metric-card.time .metric-icon {
+  background: rgba(255, 193, 7, 0.2);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.metric-card.points .metric-icon {
+  background: rgba(108, 117, 125, 0.2);
+  border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+/* Gráfico de velocidad */
+.speed-chart {
+  margin: 20px 0;
+}
+
+.chart-container {
+  background: rgba(5, 5, 15, 0.8);
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid rgba(100, 150, 255, 0.2);
+}
+
+.chart-bars {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  height: 80px;
+  margin-bottom: 10px;
+  padding: 0 10px;
+}
+
+.chart-bar {
+  flex: 1;
+  background: linear-gradient(to top, #ff6b47, #ff8c42);
+  margin: 0 1px;
+  border-radius: 2px 2px 0 0;
+  min-height: 2px;
+  transition: all 0.3s ease;
+}
+
+.chart-bar:hover {
+  background: linear-gradient(to top, #ff8c42, #ffad5a);
+  transform: scaleY(1.1);
+}
+
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #8080a0;
+  font-family: "Orbitron", monospace;
+  padding: 0 10px;
+}
+
+/* Indicador de riesgo */
+.risk-indicator {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(100, 150, 255, 0.2);
+}
+
+.risk-level {
+  text-align: center;
+}
+
+.risk-high {
+  color: #e74c3c;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Orbitron", sans-serif;
+  text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+  animation: pulse-red 2s infinite;
+}
+
+.risk-medium {
+  color: #f39c12;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Orbitron", sans-serif;
+  text-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+  animation: pulse-yellow 2s infinite;
+}
+
+.risk-low {
+  color: #27ae60;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Orbitron", sans-serif;
+  text-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+  animation: pulse-green 2s infinite;
+}
+
+.risk-level p {
+  color: #a0b0d0;
+  font-size: 12px;
+  font-family: "Orbitron", monospace;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+/* Animaciones */
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes pulse-yellow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .trajectory-visualization {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90vw;
+    max-height: 80vh;
+    right: auto;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  
+  .metric-card {
+    padding: 12px;
+    gap: 10px;
+  }
+  
+  .metric-icon {
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+  }
+  
+  .metric-value {
+    font-size: 14px;
+  }
+  
+  .visualization-panel {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .trajectory-visualization {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 95vw;
+    max-height: 85vh;
+    right: auto;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .metric-card {
+    padding: 10px;
+    gap: 8px;
+  }
+  
+  .metric-icon {
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .metric-value {
+    font-size: 13px;
+  }
+  
+  .chart-bars {
+    height: 60px;
+  }
+  
+  .visualization-panel {
+    padding: 12px;
+  }
+}

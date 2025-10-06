@@ -1,11 +1,11 @@
 .neo-selector {
-  background: rgba(15, 15, 35, 0.9);
+  background: rgba(15, 15, 35, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 16px;
   border: 1px solid rgba(100, 150, 255, 0.3);
-  padding: 20px;
+  padding: 25px;
   margin: 20px;
-  max-width: 500px;
+  max-width: 520px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
@@ -21,6 +21,81 @@
 
 .neo-selector-section {
   margin-bottom: 25px;
+}
+
+/* Estilos para datos de ejemplo */
+.neo-examples {
+  margin-bottom: 15px;
+}
+
+.examples-info {
+  color: #6b9fff;
+  font-size: 12px;
+  font-style: italic;
+  margin-bottom: 10px;
+  text-align: center;
+  padding: 8px;
+  background: rgba(107, 159, 255, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(107, 159, 255, 0.2);
+}
+
+/* Controles de trayectoria */
+.trajectory-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.calculate-trajectory-btn {
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #6b9fff, #4a7cff);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: "Orbitron", sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(107, 159, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.calculate-trajectory-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(107, 159, 255, 0.4);
+  background: linear-gradient(135deg, #7ba3ff, #5a8cff);
+}
+
+.calculate-trajectory-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.impact-scenarios-btn {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #ff6b47, #ff8c42);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Orbitron", sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 71, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.impact-scenarios-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 71, 0.4);
+  background: linear-gradient(135deg, #ff7a57, #ff9a52);
 }
 
 .neo-selector-label {

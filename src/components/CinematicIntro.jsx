@@ -110,7 +110,7 @@ function CinematicIntro({ onComplete }) {
         <div 
           className={`intro-subtitle ${stage >= 2 ? 'visible' : ''}`}
         >
-          BEYOND UNIVERSE
+          THE UNIVERSE OF WHAT IF
         </div>
         
         <div 

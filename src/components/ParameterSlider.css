@@ -39,6 +39,16 @@
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
+  transition: all 0.3s ease;
+}
+
+.slider:hover {
+  height: 8px;
+  background: rgba(100, 150, 255, 0.3);
+}
+
+.slider:focus {
+  box-shadow: 0 0 0 2px rgba(107, 159, 255, 0.3);
 }
 
 .slider-min-max {
@@ -83,32 +93,53 @@
 /* Estilos para el slider thumb */
 .slider::-webkit-slider-thumb {
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #6b9fff 0%, #4a7cff 100%);
   cursor: pointer;
-  box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
-  transition: all 0.2s;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
 .slider::-webkit-slider-thumb:hover {
   transform: scale(1.2);
-  box-shadow: 0 0 15px rgba(102, 126, 234, 0.8);
+  box-shadow: 0 4px 12px rgba(107, 159, 255, 0.6);
+  border-color: #4a7cff;
+}
+
+.slider::-webkit-slider-thumb:active {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(107, 159, 255, 0.8);
 }
 
 .slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #6b9fff 0%, #4a7cff 100%);
   cursor: pointer;
-  border: none;
-  box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
-  transition: all 0.2s;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
 .slider::-moz-range-thumb:hover {
   transform: scale(1.2);
-  box-shadow: 0 0 15px rgba(102, 126, 234, 0.8);
+  box-shadow: 0 4px 12px rgba(107, 159, 255, 0.6);
+  border-color: #4a7cff;
+}
+
+.slider::-moz-range-thumb:active {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(107, 159, 255, 0.8);
+}
+
+/* Firefox track */
+.slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(100, 150, 255, 0.2);
+  border: none;
 }

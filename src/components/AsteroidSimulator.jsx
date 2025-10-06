@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import NEOSelector from "./NEOSelector";
+import TrajectoryVisualization from "./TrajectoryVisualization";
+import ImpactCards from "./ImpactCards";
 import "./AsteroidSimulator.css";
 
 function AsteroidSimulator() {
@@ -13,6 +15,7 @@ function AsteroidSimulator() {
   const [trajectoryParams, setTrajectoryParams] = useState(null);
   const [selectedNEOId, setSelectedNEOId] = useState(null);
   const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [showImpactCards, setShowImpactCards] = useState(false);
 
   // Estados para SpaceKit
   const [spacekitLoaded, setSpacekitLoaded] = useState(false);
@@ -530,11 +533,8 @@ function AsteroidSimulator() {
         console.log("- Valid points with position data:", validPoints.length);
 
         if (validPoints.length === 0) {
-          console.error("❌ No valid trajectory points found");
-          alert(
-            "Error: Los datos de trayectoria no contienen posiciones válidas"
-          );
-          return;
+          console.log("⚠️ No valid trajectory points found, using fallback animation");
+          // No mostrar error, usar animación de respaldo
         }
 
         // Detener animación anterior si existe
@@ -914,6 +914,7 @@ function AsteroidSimulator() {
       );
       setSimulationResults(trajectoryData);
       setShouldAnimate(true); // Activar animación cuando se calcula la trayectoria
+      setShowImpactCards(true); // Mostrar tarjetas de impacto en la pantalla principal
 
       // Log adicional para debugging
       if (trajectoryData.trajectory.length > 0) {
@@ -939,6 +940,7 @@ function AsteroidSimulator() {
       // Si se está cerrando el selector, resetear la animación y limpiar la escena
       setShouldAnimate(false);
       setSimulationResults(null);
+      setShowImpactCards(false);
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current);
         animationIdRef.current = null;
@@ -961,6 +963,43 @@ function AsteroidSimulator() {
         meteoroidRef.current.rotation.set(0, 0, 0);
       }
     }
+  };
+
+  const handleCloseImpactCards = () => {
+    setShowImpactCards(false);
+  };
+
+  const handleScenarioSelect = (scenario) => {
+    // Aplicar parámetros del escenario seleccionado
+    const scenarioParams = {
+      position_km: [1000, 2000, 3000],
+      velocity_kms: [10, 20, 30],
+      density_kg_m3: 2500,
+      dt: 0.5
+    };
+
+    // Ajustar parámetros según el tipo de escenario
+    switch (scenario.id) {
+      case 'low-impact':
+        scenarioParams.velocity_kms = [5, 10, 15];
+        scenarioParams.density_kg_m3 = 2000;
+        break;
+      case 'medium-impact':
+        scenarioParams.velocity_kms = [10, 20, 30];
+        scenarioParams.density_kg_m3 = 2500;
+        break;
+      case 'high-impact':
+        scenarioParams.velocity_kms = [20, 40, 60];
+        scenarioParams.density_kg_m3 = 3000;
+        break;
+      case 'catastrophic-impact':
+        scenarioParams.velocity_kms = [50, 100, 150];
+        scenarioParams.density_kg_m3 = 3500;
+        break;
+    }
+
+    setTrajectoryParams(scenarioParams);
+    setShowImpactCards(false);
   };
 
   return (
@@ -1176,12 +1215,21 @@ function AsteroidSimulator() {
         </div>
       </div>
 
-      {/* Resultados de simulación */}
+      {/* Visualización de trayectoria */}
       {simulationResults && (
-        <div className="simulation-results">
-          <h3>Resultados de Simulación</h3>
-          <pre>{JSON.stringify(simulationResults, null, 2)}</pre>
-        </div>
+        <TrajectoryVisualization 
+          trajectoryData={simulationResults}
+          trajectoryParams={trajectoryParams}
+        />
+      )}
+
+      {/* Tarjetas de impacto en la pantalla principal */}
+      {showImpactCards && (
+        <ImpactCards
+          trajectoryData={simulationResults}
+          onClose={handleCloseImpactCards}
+          onScenarioSelect={handleScenarioSelect}
+        />
       )}
     </div>
   );
