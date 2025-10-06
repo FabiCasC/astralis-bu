@@ -1,0 +1,254 @@
+.impact-scenarios {
+  background: rgba(15, 15, 35, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(100, 150, 255, 0.3);
+  padding: 24px;
+  margin: 20px 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.scenarios-title {
+  color: #ff6b47;
+  font-size: 24px;
+  margin-bottom: 8px;
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255, 107, 71, 0.5);
+}
+
+.scenarios-subtitle {
+  color: #b8c6ff;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.scenarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.scenario-card {
+  background: rgba(30, 30, 60, 0.8);
+  border-radius: 12px;
+  border: 1px solid rgba(100, 150, 255, 0.2);
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.scenario-card:hover {
+  border-color: rgba(255, 107, 71, 0.6);
+  box-shadow: 0 4px 20px rgba(255, 107, 71, 0.2);
+  transform: translateY(-2px);
+}
+
+.scenario-card.selected {
+  border-color: #ff6b47;
+  box-shadow: 0 6px 25px rgba(255, 107, 71, 0.4);
+  background: rgba(40, 30, 60, 0.9);
+}
+
+.scenario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.scenario-name {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.scenario-probability {
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.scenario-description {
+  color: #e0e8ff;
+  font-size: 14px;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.scenario-details {
+  margin-bottom: 12px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.detail-item strong {
+  color: #6b9fff;
+  font-weight: 500;
+}
+
+.parameter-value {
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.impact-likelihood {
+  color: #ff6b47;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.scenario-detailed {
+  color: #b8c6ff;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.scenario-actions {
+  background: rgba(255, 107, 71, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 107, 71, 0.3);
+}
+
+.apply-scenario-btn {
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #ff6b47 0%, #ff4500 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(255, 107, 71, 0.3);
+}
+
+.apply-scenario-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 71, 0.5);
+}
+
+.scenario-warning {
+  color: #f39c12;
+  font-size: 14px;
+  text-align: center;
+  padding: 8px;
+  background: rgba(243, 156, 18, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(243, 156, 18, 0.3);
+}
+
+.physics-info {
+  background: rgba(20, 40, 80, 0.6);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(100, 150, 255, 0.2);
+}
+
+.physics-info h4 {
+  color: #6b9fff;
+  font-size: 16px;
+  margin-bottom: 12px;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.physics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.physics-item {
+  color: #e0e8ff;
+  font-size: 13px;
+  padding: 6px 0;
+}
+
+.physics-item strong {
+  color: #87ceeb;
+}
+
+.recommendations {
+  background: rgba(39, 174, 96, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.recommendations h4 {
+  color: #27ae60;
+  font-size: 16px;
+  margin-bottom: 12px;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.recommendations ul {
+  color: #e0e8ff;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.recommendations li {
+  margin-bottom: 6px;
+}
+
+.recommendations li strong {
+  color: #27ae60;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .scenarios-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .physics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .scenario-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* Animation for scenario selection */
+@keyframes pulseSelection {
+  0% { box-shadow: 0 6px 25px rgba(255, 107, 71, 0.4); }
+  50% { box-shadow: 0 8px 30px rgba(255, 107, 71, 0.6); }
+  100% { box-shadow: 0 6px 25px rgba(255, 107, 71, 0.4); }
+}
+
+.scenario-card.selected {
+  animation: pulseSelection 2s infinite;
+}

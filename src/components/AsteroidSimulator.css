@@ -327,3 +327,50 @@
 .status-value[style*="color: #27ae60"] {
   animation: pulse 2s infinite;
 }
+
+/* Estilos para alerta de impacto */
+.status-item:has(.status-label:contains("IMPACTO")) {
+  background: rgba(231, 76, 60, 0.2);
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  padding: 8px 12px;
+  animation: impactAlert 1.5s infinite;
+}
+
+@keyframes impactAlert {
+  0% {
+    background: rgba(231, 76, 60, 0.2);
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+  }
+  50% {
+    background: rgba(231, 76, 60, 0.4);
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+  }
+  100% {
+    background: rgba(231, 76, 60, 0.2);
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+  }
+}
+
+/* Estilo especial para alertas de impacto */
+.impact-warning {
+  background: linear-gradient(45deg, #e74c3c, #c0392b);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  margin: 10px 0;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+  animation: impactWarning 2s infinite;
+}
+
+@keyframes impactWarning {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}

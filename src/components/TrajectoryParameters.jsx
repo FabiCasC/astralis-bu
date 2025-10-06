@@ -5,19 +5,43 @@ import './TrajectoryParameters.css';
 function TrajectoryParameters({ onParametersChange, initialParameters = {} }) {
   // Estados para parámetros de trayectoria
   const [position, setPosition] = useState({
-    x: initialParameters.position?.x || 1000,
-    y: initialParameters.position?.y || 2000,
-    z: initialParameters.position?.z || 3000
+    x: initialParameters.position_km?.[0] || initialParameters.position?.x || 1000,
+    y: initialParameters.position_km?.[1] || initialParameters.position?.y || 2000,
+    z: initialParameters.position_km?.[2] || initialParameters.position?.z || 3000
   });
 
   const [velocity, setVelocity] = useState({
-    vx: initialParameters.velocity?.vx || 10,
-    vy: initialParameters.velocity?.vy || 20,
-    vz: initialParameters.velocity?.vz || 30
+    vx: initialParameters.velocity_kms?.[0] || initialParameters.velocity?.vx || 10,
+    vy: initialParameters.velocity_kms?.[1] || initialParameters.velocity?.vy || 20,
+    vz: initialParameters.velocity_kms?.[2] || initialParameters.velocity?.vz || 30
   });
 
-  const [density, setDensity] = useState(initialParameters.density || 2500);
+  const [density, setDensity] = useState(initialParameters.density_kg_m3 || initialParameters.density || 2500);
   const [dt, setDt] = useState(initialParameters.dt || 0.5);
+
+  // Actualizar estados cuando cambien los parámetros iniciales
+  React.useEffect(() => {
+    if (initialParameters.position_km) {
+      setPosition({
+        x: initialParameters.position_km[0] || 1000,
+        y: initialParameters.position_km[1] || 2000,
+        z: initialParameters.position_km[2] || 3000
+      });
+    }
+    if (initialParameters.velocity_kms) {
+      setVelocity({
+        vx: initialParameters.velocity_kms[0] || 10,
+        vy: initialParameters.velocity_kms[1] || 20,
+        vz: initialParameters.velocity_kms[2] || 30
+      });
+    }
+    if (initialParameters.density_kg_m3 !== undefined) {
+      setDensity(initialParameters.density_kg_m3);
+    }
+    if (initialParameters.dt !== undefined) {
+      setDt(initialParameters.dt);
+    }
+  }, [initialParameters]);
 
   // Función para actualizar parámetros y notificar al componente padre
   const updateParameters = React.useCallback((newParams = {}) => {

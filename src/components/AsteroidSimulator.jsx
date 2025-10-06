@@ -348,17 +348,17 @@ function AsteroidSimulator() {
       meteoroidGroup.position.set(40, 40, 40);
       scene.add(meteoroidGroup);
 
-      // Crear órbita terrestre más visible
-      const orbitGeometry = new THREE.RingGeometry(25, 27, 64);
-      const orbitMaterial = new THREE.MeshBasicMaterial({
-        color: 0x4a90e2,
-        transparent: true,
-        opacity: 0.8,
-        side: THREE.DoubleSide,
-      });
-      const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial);
-      orbit.rotation.x = Math.PI / 2;
-      scene.add(orbit);
+      // Crear órbita terrestre más visible - COMENTADO (removido por solicitud del usuario)
+      // const orbitGeometry = new THREE.RingGeometry(25, 27, 64);
+      // const orbitMaterial = new THREE.MeshBasicMaterial({
+      //   color: 0x4a90e2,
+      //   transparent: true,
+      //   opacity: 0.8,
+      //   side: THREE.DoubleSide,
+      // });
+      // const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial);
+      // orbit.rotation.x = Math.PI / 2;
+      // scene.add(orbit);
 
       // Agregar luces más realistas
       const ambientLight = new THREE.AmbientLight(0x404040, 0.2);
@@ -1073,6 +1073,44 @@ function AsteroidSimulator() {
                   {shouldAnimate ? "▶️ Activa" : "⏸️ Pausada"}
                 </span>
               </div>
+              {simulationResults.impact_data && (
+                <>
+                  <div className="status-item">
+                    <span className="status-label">⚠️ IMPACTO DETECTADO:</span>
+                    <span
+                      className="status-value"
+                      style={{ color: "#e74c3c", fontWeight: "bold" }}
+                    >
+                      🔥 SÍ
+                    </span>
+                  </div>
+                  {simulationResults.impact_data.impact_energy && (
+                    <div className="status-item">
+                      <span className="status-label">Energía de impacto:</span>
+                      <span
+                        className="status-value"
+                        style={{ color: "#ff6b47" }}
+                      >
+                        {simulationResults.impact_data.impact_energy.toExponential(
+                          2
+                        )}{" "}
+                        J
+                      </span>
+                    </div>
+                  )}
+                  {simulationResults.impact_data.impact_time && (
+                    <div className="status-item">
+                      <span className="status-label">Tiempo de impacto:</span>
+                      <span
+                        className="status-value"
+                        style={{ color: "#f39c12" }}
+                      >
+                        {simulationResults.impact_data.impact_time.toFixed(2)} s
+                      </span>
+                    </div>
+                  )}
+                </>
+              )}
               {simulationResults.metadata && (
                 <div className="status-item">
                   <span className="status-label">Duración simulación:</span>
@@ -1096,12 +1134,6 @@ function AsteroidSimulator() {
                 🌍
               </span>
               <span className="legend-text">Tierra (rotando)</span>
-            </div>
-            <div className="legend-item">
-              <span className="legend-color" style={{ color: "#4a90e2" }}>
-                ●
-              </span>
-              <span className="legend-text">Órbita terrestre</span>
             </div>
             <div className="legend-item">
               <span className="legend-color" style={{ color: "#ff6b47" }}>

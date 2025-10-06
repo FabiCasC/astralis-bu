@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNEOs, useNEODetails, useTrajectoryCalculation } from '../hooks/useNEOs.js';
 import TrajectoryParameters from './TrajectoryParameters.jsx';
+import ImpactScenarios from './ImpactScenarios.jsx';
 import './NEOSelector.css';
 
 function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange }) {
   const [selectedNEOId, setSelectedNEOId] = useState('');
+  const [showImpactScenarios, setShowImpactScenarios] = useState(false);
   const [trajectoryParams, setTrajectoryParams] = useState({
     position_km: [1000, 2000, 3000],
     velocity_kms: [10, 20, 30],
@@ -47,6 +49,16 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
     if (onParametersChange) {
       onParametersChange(newParams);
     }
+  };
+
+  const handleApplyImpactScenario = (scenarioParams) => {
+    console.log('🎯 Aplicando escenario de impacto:', scenarioParams);
+    setTrajectoryParams(scenarioParams);
+    // También notificar al componente padre
+    if (onParametersChange) {
+      onParametersChange(scenarioParams);
+    }
+    setShowImpactScenarios(false);
   };
 
   return (
@@ -120,9 +132,35 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
       {/* Parámetros de trayectoria */}
       {selectedNEOId && (
         <div className="neo-selector-section">
+          <div className="trajectory-controls">
+            <button
+              onClick={() => setShowImpactScenarios(!showImpactScenarios)}
+              className="impact-scenarios-toggle"
+              style={{
+                marginBottom: '16px',
+                padding: '10px 16px',
+                backgroundColor: showImpactScenarios ? '#ff6b47' : '#6b9fff',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600',
+                transition: 'all 0.3s'
+              }}
+            >
+              {showImpactScenarios ? '📊 Ocultar Escenarios de Impacto' : '🎯 Ver Escenarios de Impacto'}
+            </button>
+          </div>
+
+          {showImpactScenarios && (
+            <ImpactScenarios onApplyScenario={handleApplyImpactScenario} />
+          )}
+          
           <TrajectoryParameters 
             onParametersChange={handleParametersChange}
             initialParameters={trajectoryParams}
+            key={JSON.stringify(trajectoryParams)} // Force re-render when params change
           />
           
           <button
