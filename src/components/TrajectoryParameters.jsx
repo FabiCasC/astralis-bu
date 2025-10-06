@@ -3,7 +3,7 @@ import ParameterSlider from './ParameterSlider';
 import './TrajectoryParameters.css';
 
 function TrajectoryParameters({ onParametersChange, parameters = {} }) {
-  // Estados para parámetros de trayectoria
+  // State for trajectory parameters
   const [position, setPosition] = useState({
     x: parameters.position_km?.[0] || parameters.position?.x || 1000,
     y: parameters.position_km?.[1] || parameters.position?.y || 2000,
@@ -19,7 +19,7 @@ function TrajectoryParameters({ onParametersChange, parameters = {} }) {
   const [density, setDensity] = useState(parameters.density_kg_m3 || parameters.density || 2500);
   const [dt, setDt] = useState(parameters.dt || 0.5);
 
-  // Actualizar estados cuando cambien los parámetros
+  // Update states when parameters change
   React.useEffect(() => {
     if (parameters.position_km) {
       setPosition({
@@ -43,7 +43,7 @@ function TrajectoryParameters({ onParametersChange, parameters = {} }) {
     }
   }, [parameters]);
 
-  // Función para actualizar parámetros y notificar al componente padre
+  // Function to update parameters and notify parent component
   const updateParameters = React.useCallback((newParams = {}) => {
     const fullParams = {
       position_km: [position.x, position.y, position.z],
@@ -58,11 +58,11 @@ function TrajectoryParameters({ onParametersChange, parameters = {} }) {
     }
   }, [position, velocity, density, dt, onParametersChange]);
 
-  // Actualizar parámetros cuando cambien los valores (con debounce)
+  // Update parameters when values change (with debounce)
   React.useEffect(() => {
     const timeoutId = setTimeout(() => {
       updateParameters();
-    }, 100); // Debounce de 100ms
+    }, 100); // 100ms debounce
 
     return () => clearTimeout(timeoutId);
   }, [position.x, position.y, position.z, velocity.vx, velocity.vy, velocity.vz, density, dt]);
@@ -113,11 +113,11 @@ function TrajectoryParameters({ onParametersChange, parameters = {} }) {
 
   return (
     <div className="trajectory-parameters">
-      <h3 className="trajectory-parameters-title">Parámetros de Trayectoria</h3>
+      <h3 className="trajectory-parameters-title">Trajectory Parameters</h3>
       
-      {/* Posición Inicial */}
+      {/* Initial Position */}
       <div className="parameter-section">
-        <h4 className="section-title">Posición Inicial (km)</h4>
+        <h4 className="section-title">Initial Position (km)</h4>
         <div className="vector-controls">
           <ParameterSlider
             label="X"
@@ -127,7 +127,7 @@ function TrajectoryParameters({ onParametersChange, parameters = {} }) {
             max={10000}
             step={100}
             unit="km"
-            info="Posición inicial en el eje X (kilómetros)"
+            info="Initial position on the X axis (kilometers)"
           />
           
           <ParameterSlider
@@ -138,7 +138,7 @@ function TrajectoryParameters({ onParametersChange, parameters = {} }) {
             max={10000}
             step={100}
             unit="km"
-            info="Posición inicial en el eje Y (kilómetros)"
+            info="Initial position on the Y axis (kilometers)"
           />
           
           <ParameterSlider
@@ -149,14 +149,14 @@ function TrajectoryParameters({ onParametersChange, parameters = {} }) {
             max={10000}
             step={100}
             unit="km"
-            info="Posición inicial en el eje Z (kilómetros)"
+            info="Initial position on the Z axis (kilometers)"
           />
         </div>
       </div>
 
-      {/* Velocidad Inicial */}
+      {/* Initial Velocity */}
       <div className="parameter-section">
-        <h4 className="section-title">Velocidad Inicial (km/s)</h4>
+        <h4 className="section-title">Initial Velocity (km/s)</h4>
         <div className="vector-controls">
           <ParameterSlider
             label="Vx"
@@ -166,7 +166,7 @@ function TrajectoryParameters({ onParametersChange, parameters = {} }) {
             max={50}
             step={0.1}
             unit="km/s"
-            info="Velocidad inicial en el eje X (kilómetros por segundo)"
+            info="Initial velocity on the X axis (kilometers per second)"
           />
           
           <ParameterSlider
@@ -177,7 +177,7 @@ function TrajectoryParameters({ onParametersChange, parameters = {} }) {
             max={50}
             step={0.1}
             unit="km/s"
-            info="Velocidad inicial en el eje Y (kilómetros por segundo)"
+            info="Initial velocity on the Y axis (kilometers per second)"
           />
           
           <ParameterSlider
@@ -188,60 +188,60 @@ function TrajectoryParameters({ onParametersChange, parameters = {} }) {
             max={50}
             step={0.1}
             unit="km/s"
-            info="Velocidad inicial en el eje Z (kilómetros por segundo)"
+            info="Initial velocity on the Z axis (kilometers per second)"
           />
         </div>
       </div>
 
-      {/* Parámetros Físicos */}
+      {/* Physical Parameters */}
       <div className="parameter-section">
-        <h4 className="section-title">Propiedades Físicas</h4>
+        <h4 className="section-title">Physical Properties</h4>
         
         <ParameterSlider
-          label="Densidad"
+          label="Density"
           value={density}
           onChange={handleDensityChange}
           min={100}
           max={8000}
           step={100}
           unit="kg/m³"
-          info="Densidad del objeto en kilogramos por metro cúbico. Rocoso ~2500, Metálico ~7800"
+          info="Object density in kilograms per cubic meter. Rocky ~2500, Metallic ~7800"
         />
         
         <ParameterSlider
-          label="Paso de Tiempo"
+          label="Time Step"
           value={dt}
           onChange={handleDtChange}
           min={0.1}
           max={2.0}
           step={0.1}
           unit="s"
-          info="Paso de tiempo para la simulación en segundos. Valores más pequeños = mayor precisión pero más lento"
+          info="Time step for simulation in seconds. Smaller values = higher precision but slower"
         />
       </div>
 
-      {/* Resumen de Parámetros */}
+      {/* Parameters Summary */}
       <div className="parameters-summary">
-        <h4 className="section-title">Resumen de Parámetros</h4>
+        <h4 className="section-title">Parameters Summary</h4>
         <div className="summary-grid">
           <div className="summary-item">
-            <span className="summary-label">Posición:</span>
+            <span className="summary-label">Position:</span>
             <span className="summary-value">
               [{position.x.toFixed(0)}, {position.y.toFixed(0)}, {position.z.toFixed(0)}] km
             </span>
           </div>
           <div className="summary-item">
-            <span className="summary-label">Velocidad:</span>
+            <span className="summary-label">Velocity:</span>
             <span className="summary-value">
               [{velocity.vx.toFixed(1)}, {velocity.vy.toFixed(1)}, {velocity.vz.toFixed(1)}] km/s
             </span>
           </div>
           <div className="summary-item">
-            <span className="summary-label">Densidad:</span>
+            <span className="summary-label">Density:</span>
             <span className="summary-value">{density} kg/m³</span>
           </div>
           <div className="summary-item">
-            <span className="summary-label">dt:</span>
+            <span className="summary-label">Time Step:</span>
             <span className="summary-value">{dt} s</span>
           </div>
         </div>

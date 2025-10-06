@@ -1,13 +1,13 @@
 import { makeRequest, buildQueryParams, APIError } from './api.js';
 
 /**
- * Servicio para interactuar con la NASA API a través del backend Flask
+ * Service to interact with NASA API through Flask backend
  */
 class NASAApiService {
   
   /**
-   * Obtiene la lista de NEOs disponibles
-   * @returns {Promise<Array>} Lista de NEOs con id y name
+   * Gets the list of available NEOs
+   * @returns {Promise<Array>} List of NEOs with id and name
    */
   async getBrowseIds() {
     try {
@@ -15,8 +15,17 @@ class NASAApiService {
       return response;
     } catch (error) {
       console.error('Error obteniendo IDs de NEOs:', error);
+      
+      // Provide more detailed error information
+      let errorMessage = 'Could not get available NEOs';
+      if (error.status === 0) {
+        errorMessage = 'Connection error - please check if the backend is running';
+      } else if (error.status >= 500) {
+        errorMessage = 'Server error - backend may be experiencing issues';
+      }
+      
       throw new APIError(
-        'No se pudieron obtener los NEOs disponibles',
+        errorMessage,
         error.status || 500,
         error.data
       );
@@ -24,13 +33,13 @@ class NASAApiService {
   }
 
   /**
-   * Obtiene datos completos de un NEO específico
-   * @param {string} asteroidId - ID del asteroide
-   * @returns {Promise<Object>} Datos completos del NEO
+   * Gets complete data for a specific NEO
+   * @param {string} asteroidId - Asteroid ID
+   * @returns {Promise<Object>} Complete NEO data
    */
   async getNEODetails(asteroidId) {
     if (!asteroidId) {
-      throw new APIError('ID del asteroide es requerido', 400);
+      throw new APIError('Asteroid ID is required', 400);
     }
 
     try {
@@ -39,8 +48,19 @@ class NASAApiService {
       return response;
     } catch (error) {
       console.error(`Error obteniendo detalles del NEO ${asteroidId}:`, error);
+      
+      // Provide more detailed error information
+      let errorMessage = `Could not get details for asteroid ${asteroidId}`;
+      if (error.status === 404) {
+        errorMessage = `Asteroid ${asteroidId} not found in database`;
+      } else if (error.status === 0) {
+        errorMessage = `Connection error - please check if the backend is running at ${window.location.origin.includes('vercel') ? 'production' : 'localhost'}`;
+      } else if (error.status >= 500) {
+        errorMessage = `Server error - backend may be experiencing issues`;
+      }
+      
       throw new APIError(
-        `No se pudieron obtener los detalles del asteroide ${asteroidId}`,
+        errorMessage,
         error.status || 500,
         error.data
       );

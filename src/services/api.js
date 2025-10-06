@@ -1,7 +1,7 @@
-// Configuración del API
-const API_BASE_URL = "http://127.0.0.1:5000";
+// API Configuration
+const API_BASE_URL = "https://mrkite-astralis.hf.space";
 
-// Clase para manejar errores personalizados
+// Custom error handling class
 class APIError extends Error {
   constructor(message, status, data = null) {
     super(message);
@@ -11,7 +11,7 @@ class APIError extends Error {
   }
 }
 
-// Función helper para hacer peticiones HTTP
+// Helper function to make HTTP requests
 async function makeRequest(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
 
@@ -31,10 +31,12 @@ async function makeRequest(endpoint, options = {}) {
   };
 
   try {
+    console.log(`🌐 Making request to: ${url}`);
     const response = await fetch(url, config);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
+      console.error(`❌ API Error ${response.status}:`, errorData);
       throw new APIError(
         errorData?.message ||
           `Error ${response.status}: ${response.statusText}`,
@@ -43,20 +45,24 @@ async function makeRequest(endpoint, options = {}) {
       );
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log(`✅ API Success:`, data);
+    return data;
   } catch (error) {
     if (error instanceof APIError) {
       throw error;
     }
 
-    // Error de red o parsing
-    throw new APIError("Error de conexión con el servidor", 0, {
+    // Network or parsing error
+    console.error(`🚨 Network/Connection Error:`, error);
+    throw new APIError("Connection error with server", 0, {
       originalError: error.message,
+      url: url
     });
   }
 }
 
-// Función para construir query parameters
+// Function to build query parameters
 function buildQueryParams(params) {
   const queryString = new URLSearchParams();
 

@@ -23,6 +23,37 @@
   margin-bottom: 25px;
 }
 
+/* Backend Status */
+.backend-status {
+  padding: 12px;
+  background: rgba(107, 159, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(107, 159, 255, 0.2);
+}
+
+.status-info {
+  color: #a0b0d0;
+  font-size: 12px;
+  margin: 0 0 8px 0;
+  font-family: 'Orbitron', monospace;
+}
+
+.status-info strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.status-error {
+  color: #ff6b47;
+  font-size: 11px;
+  margin: 0;
+  font-family: 'Orbitron', monospace;
+  background: rgba(255, 107, 71, 0.1);
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 107, 71, 0.2);
+}
+
 /* Estilos para datos de ejemplo */
 .neo-examples {
   margin-bottom: 15px;

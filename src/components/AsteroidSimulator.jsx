@@ -75,10 +75,10 @@ function AsteroidSimulator() {
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
 
-      // Crear la Tierra con textura más realista
+      // Create Earth with more realistic texture
       const earthGeometry = new THREE.SphereGeometry(20, 128, 64);
 
-      // Crear textura procedural más detallada para simular la Tierra
+      // Create more detailed procedural texture to simulate Earth
       const canvas = document.createElement("canvas");
       canvas.width = 1024;
       canvas.height = 512;
@@ -215,7 +215,7 @@ function AsteroidSimulator() {
       earth.receiveShadow = true;
       scene.add(earth);
 
-      // Agregar atmósfera alrededor de la Tierra
+      // Add atmosphere around Earth
       const atmosphereGeometry = new THREE.SphereGeometry(21, 64, 32);
       const atmosphereMaterial = new THREE.MeshBasicMaterial({
         color: 0x87ceeb,
@@ -444,21 +444,21 @@ function AsteroidSimulator() {
       controls.minDistance = 50;
       controls.maxDistance = 500;
 
-      // Guardar referencias
+      // Save references
       sceneRef.current = { scene, camera, renderer, controls };
       meteoroidRef.current = meteoroidGroup;
 
-      // Función de animación
+      // Animation function
       const animate = () => {
         requestAnimationFrame(animate);
 
-        // Rotar la Tierra
+        // Rotate Earth
         earth.rotation.y += 0.005;
 
-        // Rotar las estrellas lentamente
+        // Rotate stars slowly
         starsGroup.rotation.y += 0.0001;
 
-        // Actualizar controles
+        // Update controls
         controls.update();
 
         renderer.render(scene, camera);
@@ -599,8 +599,8 @@ function AsteroidSimulator() {
             Array.isArray(point.position) &&
             point.position.length >= 3
           ) {
-            // Escalado dinámico mejorado
-            const centerOffset = { x: 0, y: 0, z: 0 }; // Centrar en la Tierra
+            // Improved dynamic scaling
+            const centerOffset = { x: 0, y: 0, z: 0 }; // Center on Earth
 
             const x = point.position[0] * scale + centerOffset.x;
             const y = point.position[1] * scale + centerOffset.y;
@@ -849,7 +849,7 @@ function AsteroidSimulator() {
           const fallbackAnimate = () => {
             if (!meteoroidRef.current) return;
 
-            // Movimiento orbital simple alrededor de la Tierra
+            // Simple orbital movement around Earth
             const radius = 60;
             const speed = 0.01;
             const x = Math.cos(fallbackTime * speed) * radius;
@@ -896,14 +896,14 @@ function AsteroidSimulator() {
   }, [simulationResults, shouldAnimate]);
 
   const handleNEOSelected = (neoId) => {
-    console.log("NEO seleccionado:", neoId);
+    console.log("NEO selected:", neoId);
     setSelectedNEOId(neoId);
   };
 
   const handleTrajectoryCalculated = (trajectoryData) => {
-    console.log("🎯 Trayectoria calculada:", trajectoryData);
+    console.log("🎯 Trajectory calculated:", trajectoryData);
 
-    // Verificar que tenemos datos válidos
+    // Verify we have valid data
     if (
       trajectoryData &&
       trajectoryData.trajectory &&
@@ -1013,29 +1013,29 @@ function AsteroidSimulator() {
         <div className="logo-subtext">BU</div>
       </div>
 
-      {/* Botón para abrir selector de NEOs */}
+      {/* Button to open NEO selector */}
       <div className="neo-selector-button-container">
         <button onClick={toggleNEOSelector} className="neo-selector-button">
-          {showNEOSelector ? "Cerrar Selector" : "Seleccionar NEO"}
+          {showNEOSelector ? "Close Selector" : "Select NEO"}
         </button>
 
-        {/* Botón para reiniciar animación */}
+        {/* Button to reset animation */}
         {simulationResults && (
           <button
             onClick={() => {
-              console.log("🔄 Reiniciando animación...");
+              console.log("🔄 Resetting animation...");
               setShouldAnimate(false);
               setTimeout(() => setShouldAnimate(true), 100);
             }}
             className="neo-selector-button"
             style={{ marginTop: "10px", backgroundColor: "#ff6b47" }}
           >
-            🔄 Reiniciar Animación
+            🔄 Reset Animation
           </button>
         )}
       </div>
 
-      {/* Selector de NEOs */}
+      {/* NEO Selector */}
       <div className={`neo-selector-overlay ${showNEOSelector ? "open" : ""}`}>
         <NEOSelector
           onNEOSelected={handleNEOSelected}
@@ -1044,14 +1044,14 @@ function AsteroidSimulator() {
         />
       </div>
 
-      {/* Información del Meteorito */}
+      {/* Meteor Information */}
       {trajectoryParams && (
         <div className="meteoroid-info">
           <div className="info-panel">
-            <h4>☄️ Meteorito Activo</h4>
+            <h4>☄️ Active Meteor</h4>
             <div className="info-grid">
               <div className="info-item">
-                <span className="info-label">Posición:</span>
+                <span className="info-label">Position:</span>
                 <span className="info-value">
                   [
                   {trajectoryParams.position_km
@@ -1061,7 +1061,7 @@ function AsteroidSimulator() {
                 </span>
               </div>
               <div className="info-item">
-                <span className="info-label">Velocidad:</span>
+                <span className="info-label">Velocity:</span>
                 <span className="info-value">
                   [
                   {trajectoryParams.velocity_kms
@@ -1071,16 +1071,16 @@ function AsteroidSimulator() {
                 </span>
               </div>
               <div className="info-item">
-                <span className="info-label">Densidad:</span>
+                <span className="info-label">Density:</span>
                 <span className="info-value">
                   {trajectoryParams.density_kg_m3} kg/m³
                 </span>
               </div>
               {shouldAnimate && (
                 <div className="info-item">
-                  <span className="info-label">Estado:</span>
+                  <span className="info-label">Status:</span>
                   <span className="info-value" style={{ color: "#ff6b47" }}>
-                    🔄 Siguiendo trayectoria
+                    🔄 Following trajectory
                   </span>
                 </div>
               )}
@@ -1163,59 +1163,57 @@ function AsteroidSimulator() {
         </div>
       )}
 
-      {/* Leyenda de la Escena */}
+      {/* Scene Legend */}
       <div className="scene-legend">
         <div className="legend-panel">
-          <h4>🌌 Elementos de la Escena</h4>
+          <h4>🌌 Scene Elements</h4>
           <div className="legend-grid">
             <div className="legend-item">
               <span className="legend-color" style={{ color: "#4a90e2" }}>
                 🌍
               </span>
-              <span className="legend-text">Tierra (rotando)</span>
+              <span className="legend-text">Earth (rotating)</span>
             </div>
             <div className="legend-item">
               <span className="legend-color" style={{ color: "#ff6b47" }}>
                 ☄️
               </span>
-              <span className="legend-text">Meteorito (animado)</span>
+              <span className="legend-text">Meteor (animated)</span>
             </div>
             <div className="legend-item">
               <span className="legend-color" style={{ color: "#ff4444" }}>
                 ●
               </span>
-              <span className="legend-text">Trayectoria del meteorito</span>
+              <span className="legend-text">Meteor trajectory</span>
             </div>
             <div className="legend-item">
               <span className="legend-color" style={{ color: "#ffffff" }}>
                 ✨
               </span>
-              <span className="legend-text">Campo de estrellas</span>
+              <span className="legend-text">Star field</span>
             </div>
             <div className="legend-item">
               <span className="legend-color" style={{ color: "#666" }}>
                 ●
               </span>
-              <span className="legend-text">Ejes de referencia</span>
+              <span className="legend-text">Reference axes</span>
             </div>
           </div>
           <div className="legend-instructions">
             <p>
-              <strong>Visualización:</strong> Three.js con texturas reales de la
-              Tierra
+              <strong>Visualization:</strong> Three.js with real Earth textures
             </p>
             <p>
-              <strong>Animación:</strong> Tierra rotando, meteorito en
-              movimiento
+              <strong>Animation:</strong> Earth rotating, meteor in motion
             </p>
             <p>
-              <strong>Controles:</strong> Arrastra para rotar, rueda para zoom
+              <strong>Controls:</strong> Drag to rotate, scroll to zoom
             </p>
           </div>
         </div>
       </div>
 
-      {/* Visualización de trayectoria */}
+      {/* Trajectory visualization */}
       {simulationResults && (
         <TrajectoryVisualization 
           trajectoryData={simulationResults}
@@ -1223,7 +1221,7 @@ function AsteroidSimulator() {
         />
       )}
 
-      {/* Tarjetas de impacto en la pantalla principal */}
+        {/* Impact cards on main screen */}
       {showImpactCards && (
         <ImpactCards
           trajectoryData={simulationResults}

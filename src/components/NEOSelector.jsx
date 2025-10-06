@@ -102,18 +102,32 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
 
   return (
     <div className="neo-selector">
-      <h3 className="neo-selector-title">Seleccionar NEO</h3>
+      <h3 className="neo-selector-title">Select NEO</h3>
       
-      {/* Selector de NEOs */}
+      {/* Backend Status */}
+      <div className="neo-selector-section">
+        <div className="backend-status">
+          <p className="status-info">
+            🔗 Backend: <strong>https://mrkite-astralis.hf.space</strong>
+          </p>
+          {neosError && (
+            <p className="status-error">
+              ⚠️ Connection Issue: {neosError.message}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* NEO Selector */}
       <div className="neo-selector-section">
         <label htmlFor="neo-select" className="neo-selector-label">
-          NEO Disponibles:
+          Available NEOs:
         </label>
         {neosLoading ? (
-          <div className="loading-spinner">Cargando NEOs...</div>
+          <div className="loading-spinner">Loading NEOs...</div>
         ) : neosError || !neos || neos.length === 0 ? (
           <div className="neo-examples">
-            <p className="examples-info">📡 Usando datos de ejemplo mientras se conecta al servidor...</p>
+            <p className="examples-info">📡 Using sample data while connecting to server...</p>
             <select
               id="neo-select"
               value={selectedNEOId}
@@ -145,12 +159,12 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
         )}
       </div>
 
-      {/* Detalles del NEO seleccionado */}
+      {/* Selected NEO details */}
       {selectedNEOId && (
         <div className="neo-selector-section">
-          <h4 className="neo-details-title">Detalles del NEO</h4>
+          <h4 className="neo-details-title">NEO Details</h4>
           {detailsLoading ? (
-            <div className="loading-spinner">Cargando detalles...</div>
+            <div className="loading-spinner">Loading details...</div>
           ) : detailsError ? (
             <div className="error-message">
               Error: {detailsError.message}
@@ -158,22 +172,22 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
           ) : neoData ? (
             <div className="neo-details">
               <div className="neo-detail-item">
-                <strong>Nombre:</strong> {neoData.name}
+                <strong>Name:</strong> {neoData.name}
               </div>
               <div className="neo-detail-item">
                 <strong>ID:</strong> {neoData.id}
               </div>
               {neoData.estimated_diameter && (
                 <div className="neo-detail-item">
-                  <strong>Diámetro estimado:</strong> 
+                  <strong>Estimated diameter:</strong> 
                   {neoData.estimated_diameter.kilometers?.estimated_diameter_min?.toFixed(2)} - 
                   {neoData.estimated_diameter.kilometers?.estimated_diameter_max?.toFixed(2)} km
                 </div>
               )}
               {neoData.is_potentially_hazardous_asteroid !== undefined && (
                 <div className="neo-detail-item">
-                  <strong>Potencialmente peligroso:</strong> 
-                  {neoData.is_potentially_hazardous_asteroid ? 'Sí' : 'No'}
+                  <strong>Potentially hazardous:</strong> 
+                  {neoData.is_potentially_hazardous_asteroid ? 'Yes' : 'No'}
                 </div>
               )}
             </div>
@@ -181,7 +195,7 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
         </div>
       )}
 
-      {/* Parámetros de trayectoria */}
+      {/* Trajectory parameters */}
       {selectedNEOId && (
         <div className="neo-selector-section">
           <TrajectoryParameters 
@@ -189,14 +203,14 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
             onParametersChange={handleParametersChange}
           />
           
-          {/* Botón para calcular trayectoria */}
+          {/* Button to calculate trajectory */}
           <div className="trajectory-controls">
             <button
               onClick={handleCalculateTrajectory}
               disabled={trajectoryLoading}
               className="calculate-trajectory-btn"
             >
-              {trajectoryLoading ? '🔄 Calculando...' : '🚀 Calcular Trayectoria'}
+              {trajectoryLoading ? '🔄 Calculating...' : '🚀 Calculate Trajectory'}
             </button>
             
           </div>
@@ -204,28 +218,28 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
         </div>
       )}
 
-      {/* Resultados de la trayectoria */}
+      {/* Trajectory results */}
       {trajectoryError && (
         <div className="error-message">
-          Error calculando trayectoria: {trajectoryError.message}
+          Error calculating trajectory: {trajectoryError.message}
         </div>
       )}
 
       {trajectoryData && (
         <div className="neo-selector-section">
-          <h4 className="trajectory-results-title">Resultados de Trayectoria</h4>
+          <h4 className="trajectory-results-title">Trajectory Results</h4>
           <div className="trajectory-results">
             <div className="trajectory-result-item">
-              <strong>Puntos calculados:</strong> {trajectoryData.trajectory?.length || 0}
+              <strong>Calculated points:</strong> {trajectoryData.trajectory?.length || 0}
             </div>
             {trajectoryData.impact_data && (
               <div className="trajectory-result-item">
-                <strong>Impacto detectado:</strong> Sí
+                <strong>Impact detected:</strong> Yes
               </div>
             )}
             {trajectoryData.impact_data?.impact_energy && (
               <div className="trajectory-result-item">
-                <strong>Energía de impacto:</strong> {trajectoryData.impact_data.impact_energy.toExponential(2)} J
+                <strong>Impact energy:</strong> {trajectoryData.impact_data.impact_energy.toExponential(2)} J
               </div>
             )}
           </div>
