@@ -104,20 +104,6 @@ function NEOSelector({ onNEOSelected, onTrajectoryCalculated, onParametersChange
     <div className="neo-selector">
       <h3 className="neo-selector-title">Select NEO</h3>
       
-      {/* Backend Status */}
-      <div className="neo-selector-section">
-        <div className="backend-status">
-          <p className="status-info">
-            🔗 Backend: <strong>https://mrkite-astralis.hf.space</strong>
-          </p>
-          {neosError && (
-            <p className="status-error">
-              ⚠️ Connection Issue: {neosError.message}
-            </p>
-          )}
-        </div>
-      </div>
-
       {/* NEO Selector */}
       <div className="neo-selector-section">
         <label htmlFor="neo-select" className="neo-selector-label">
